@@ -15,6 +15,7 @@ var Event = function (opening, recurring, startDate, endDate) {
 };
 
 Event.prototype.availabilities = function (fromDate, toDate) {
+    //first add all the possible solution    
     eventList.forEach(function (provider) {
         if (provider.opening === true) {
             startDateAvailable = Date.parse(provider.startDate);
@@ -22,6 +23,7 @@ Event.prototype.availabilities = function (fromDate, toDate) {
             verifDate(provider, fromDate, toDate, startDateAvailable, endDateAvailable);
         };
     });
+    //then delete the already taken solution
     eventList.forEach(function (provider) {
         if (provider.opening === false) {
             startDateAvailable = Date.parse(provider.startDate);
@@ -47,6 +49,7 @@ function verifDate(provider, fromDate, toDate, startDateAvailable, endDateAvaila
     }
 }
 
+//add a solution to the array
 function addSlot(fromDate, toDate, startDateAvailable, endDateAvailable) {
     tmpSlot = startDateAvailable;
     while (tmpSlot < Date.parse(toDate) && tmpSlot < endDateAvailable) {
@@ -56,19 +59,21 @@ function addSlot(fromDate, toDate, startDateAvailable, endDateAvailable) {
 
 }
 
+
+//delete a solution from the array
 function deleteSlot(fromDate, toDate, startDateAvailable, endDateAvailable) {
     tmpSlot = startDateAvailable;
     while (tmpSlot < Date.parse(toDate) && tmpSlot <= endDateAvailable) {
-        for(i = 0; i < slotAvailable.length; i++) {
-            if (timeConverter(tmpSlot) == slotAvailable[i])
-                {
-                    slotAvailable.splice(i, 1);
-                }
+        for (i = 0; i < slotAvailable.length; i++) {
+            if (timeConverter(tmpSlot) == slotAvailable[i]) {
+                slotAvailable.splice(i, 1);
+            }
         }
         tmpSlot += 30 * 60 * 1000;
     };
 }
 
+//convert from timestamp to readeable time
 function timeConverter(timestamp) {
     var a = new Date(timestamp);
     var months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -82,10 +87,14 @@ function timeConverter(timestamp) {
     return time;
 }
 
+//print the answer on the console
 function printSlot(slotAvailable) {
-    slotAvailable.forEach(function (date) {
+    if (slotAvailable[0] == null) {
+        console.log('I\'m not available at all.');
+    } else {
+        slotAvailable.forEach(function (date) {
             console.log('I\'m available the ' + date);
-    });
-    console.log('I\'m not available any other time !')
-    
+        });
+        console.log('I\'m not available any other time !');
+    }
 }

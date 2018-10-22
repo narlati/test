@@ -17,3 +17,4 @@ Event.prototype.availabilities(fromDate, toDate);
  * I'm available from July 8th, at 10:30, 11:00, 12:30, 13:00, and 13:30
  * I'm not available any other time !
  */
+
